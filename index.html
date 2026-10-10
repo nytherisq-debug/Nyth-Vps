@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Terry · Cloud Nexus</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0a0a14;
+      background-image: 
+        radial-gradient(ellipse at 10% 20%, rgba(100, 200, 255, 0.06) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 80%, rgba(200, 100, 255, 0.05) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 0%, #0a0a14 100%);
+      min-height: 100vh;
+      color: #e2e8f0;
+      padding: 2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 1050px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* ---- Header with glassmorphism + glowing edge ---- */
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(18, 20, 30, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 2rem;
+      padding: 2rem 2.5rem;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::after {
+      content: "";
+      position: absolute;
+      top: -40%;
+      left: -15%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(72, 180, 255, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    .title-block {
+      position: relative;
+      z-index: 2;
+    }
+
+    .title-block h1 {
+      font-size: clamp(2.8rem, 7vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      background: linear-gradient(135deg, #64b5f6, #ce93d8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.3rem;
+    }
+
+    .tagline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .tagline span {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.35rem 1.2rem;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      letter-spacing: 0.3px;
+    }
+
+    .live-chip {
+      background: rgba(72, 220, 150, 0.12);
+      border: 1px solid rgba(72, 220, 150, 0.3);
+      color: #7fffd4;
+      padding: 0.6rem 1.8rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 2;
+      backdrop-filter: blur(4px);
+    }
+
+    .live-chip::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      background: #3eff9e;
+      box-shadow: 0 0 15px #3eff9e;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.2); }
+    }
+
+    /* ---- Cards grid (asymmetrical rounded corners) ---- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 1.4rem;
+    }
+
+    .card {
+      background: rgba(22, 24, 36, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 2rem 0.5rem 2rem 0.5rem;
+      padding: 1.6rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 15px 30px -12px rgba(0,0,0,0.5);
+    }
+
+    .card:hover {
+      border-color: rgba(150, 180, 255, 0.25);
+      transform: translateY(-5px);
+      background: rgba(28, 30, 44, 0.8);
+    }
+
+    .card-icon {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.5));
+    }
+
+    .card-label {
+      color: #8892a4;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+    }
+
+    .card-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .card-value.highlight {
+      color: #c084fc;
+    }
+
+    .active-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      color: #6ee7b7;
+      font-weight: 600;
+    }
+
+    /* ---- Section panels ---- */
+    .section {
+      background: rgba(16, 18, 28, 0.65);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 2rem 0.5rem 2rem 0.5rem;
+      padding: 1.8rem 2rem;
+    }
+
+    .section h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      color: #cbd5e1;
+    }
+
+    .section h2 span {
+      color: #a78bfa;
+      background: rgba(167, 139, 250, 0.1);
+      padding: 0.2rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .code-panel {
+      background: #050510;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.2rem 0.3rem 1.2rem 0.3rem;
+      padding: 1.2rem;
+      font-family: 'Plus Jakarta Sans', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      color: #b9c7dd;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* ---- Service list grid ---- */
+    .service-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .service-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1rem;
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.25s ease;
+    }
+
+    .service-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(167, 139, 250, 0.3);
+    }
+
+    .service-port {
+      background: rgba(167, 139, 250, 0.15);
+      color: #c084fc;
+      padding: 0.4rem 0.9rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .service-info {
+      flex: 1;
+    }
+
+    .service-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #e2e8f0;
+    }
+
+    .service-access {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 0.2rem;
+    }
+
+    .footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #5b657c;
+      margin-top: 0.3rem;
+      padding: 0 0.3rem;
+    }
+
+    .footer a {
+      color: #a78bfa;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer .dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      background: #3eff9e;
+      border-radius: 50%;
+      margin-right: 0.4rem;
+      box-shadow: 0 0 12px #3eff9e;
+    }
+
+    @media (max-width: 550px) {
+      body {
+        padding: 1rem;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="title-block">
+        <h1>✦ Terry</h1>
+        <div class="tagline">
+          <span>Ubuntu 20.04 LTS</span>
+          <span>Secure VPS</span>
+          <span>Multi-Port</span>
+        </div>
+      </div>
+      <div class="live-chip">
+        System Online
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="card">
+        <div class="card-icon">🖥️</div>
+        <div class="card-label">System</div>
+        <div class="card-value">Ubuntu 20.04</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔐</div>
+        <div class="card-label">SSH Access</div>
+        <div class="card-value highlight">Port 22</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <div class="card-label">Open Ports</div>
+        <div class="card-value active-badge">
+          <span>6 Active</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📡</div>
+        <div class="card-label">Supervisord</div>
+        <div class="card-value active-badge">
+          <span>Running</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services Section (Replaced Port Configuration) -->
+    <div class="section">
+      <h2>🔧 <span>Available Services</span> (6 ports exposed)</h2>
+      <div class="service-list">
+        <div class="service-item">
+          <div class="service-port">22</div>
+          <div class="service-info">
+            <div class="service-name">SSH</div>
+            <div class="service-access">Private Access</div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-port">80</div>
+          <div class="service-info">
+            <div class="service-name">Web UI</div>
+            <div class="service-access">Public Access</div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-port">443</div>
+          <div class="service-info">
+            <div class="service-name">HTTPS</div>
+            <div class="service-access">Public Access</div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-port">3000</div>
+          <div class="service-info">
+            <div class="service-name">Application</div>
+            <div class="service-access">Public Access</div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-port">8080</div>
+          <div class="service-info">
+            <div class="service-name">Application</div>
+            <div class="service-access">Public Access</div>
+          </div>
+        </div>
+        <div class="service-item">
+          <div class="service-port">8888</div>
+          <div class="service-info">
+            <div class="service-name">Application</div>
+            <div class="service-access">Public Access</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SSH Connection Section -->
+    <div class="section">
+      <h2>🔐 <span>SSH Connection</span></h2>
+      <div class="code-panel">
+        <pre>
+# Connect to your VPS via SSH
+ssh root@&lt;your-server-ip&gt; -p 22
+
+# Password: (set via ROOT_PASS environment variable)
+
+# Services are available on their respective ports
+# Web UI: http://&lt;your-server-ip&gt;:80
+# HTTPS: https://&lt;your-server-ip&gt;:443</pre>
+      </div>
+    </div>
+
+    <!-- System Info -->
+    <div class="section">
+      <h2>📊 <span>System Status</span></h2>
+      <div class="code-panel" id="sysinfo">
+        <pre>⏳ Fetching system information...</pre>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div>
+        <span class="dot"></span> Terry VPS · All Systems Operational
+      </div>
+      <div>
+        <span>© 2026</span> · 
+        <a href="#" target="_blank">GitHub</a> · 
+        <span>Built with ❤️</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadSysInfo() {
+      const sysElement = document.getElementById('sysinfo');
+      if (!sysElement) return;
+      try {
+        const response = await fetch('/health');
+        if (response.ok) {
+          const text = await response.text();
+          sysElement.innerHTML = `<pre>🟢 Status: ${text.trim()}
+
+💡 Deploy your application on port 80, 8080, or other available ports
+💡 All ports are forwarded to your VPS automatically
+💡 Check your dashboard for real-time monitoring</pre>`;
+        } else {
+          sysElement.innerHTML = `<pre>○ Waiting for server response...</pre>`;
+        }
+      } catch (error) {
+        sysElement.innerHTML = `<pre>○ Checking connection... (local environment)
+🖥️ CPU: -- | 💾 RAM: -- | 📡 Uptime: --</pre>`;
+      }
+    }
+
+    loadSysInfo();
+    setInterval(loadSysInfo, 15000);
+  </script>
+</body>
+</html>
